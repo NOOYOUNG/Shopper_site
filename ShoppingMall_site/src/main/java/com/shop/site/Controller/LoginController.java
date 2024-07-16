@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import com.shop.site.Model.Member;
 import com.shop.site.Repository.ItemRepository;
 import com.shop.site.Repository.MemberRepository;
+import com.shop.site.Service.LoginClass;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;

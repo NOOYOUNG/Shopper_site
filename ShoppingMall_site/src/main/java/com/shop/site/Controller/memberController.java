@@ -14,6 +14,7 @@ import com.shop.site.Model.Item;
 import com.shop.site.Model.Member;
 import com.shop.site.Repository.ItemRepository;
 import com.shop.site.Repository.MemberRepository;
+import com.shop.site.Service.LoginClass;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
@@ -136,16 +137,5 @@ public class memberController {
 			return "loginSuccess";
 		}
 	}
-	
-	@RequestMapping(value="/searchItem", method=RequestMethod.GET)
-	public String searchItem(HttpServletRequest request) {
-		String searchText=request.getParameter("searchText");
-		
-		List<Item> itemList=itemRepository.findByItemNameContains(searchText);
-		
-		request.setAttribute("itemList", itemList);
-		
-		return "readItem";
-	}
-	
+
 }

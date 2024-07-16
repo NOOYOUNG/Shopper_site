@@ -1,4 +1,4 @@
-package com.shop.site.Controller;
+package com.shop.site.Service;
 
 import com.shop.site.Repository.MemberRepository;
 
