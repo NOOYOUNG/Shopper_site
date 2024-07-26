@@ -29,27 +29,20 @@ public class AdminController {
 	
 	@RequestMapping(value="/addItem", method=RequestMethod.GET)
 	public String addItem(HttpServletRequest request, HttpSession session) {
-		String loggedState=(String)session.getAttribute("loggedstate");
-		if(loggedState!=null || !loggedState.isEmpty()) {
-			if(loggedState.contains("admin")) {
-				return "addItem";	
-			}
-			else {
-				Member loggedMember=memberRepository.findByUserId(loggedState);
-				request.setAttribute("currentUserId", loggedMember.getUserId());
-				request.setAttribute("currentName", loggedMember.getName());
-				request.setAttribute("currentAge", loggedMember.getAge());
-				request.setAttribute("currentAddress", loggedMember.getAddress());
-				request.setAttribute("currenPhone", loggedMember.getPhone());
-				return "loginSuccess";
-			}
+		String loggedState=(String)session.getAttribute("loggedstate");	
+		if (loggedState == null || loggedState.isEmpty()) {
+			return "redirect:/";
 		}
-		
-		return "redirect:/";
+		return "addItem";
 	}
 	
 	@RequestMapping(value="/insertItem", method=RequestMethod.GET)
-	public String insertItem(HttpServletRequest request) {
+	public String insertItem(HttpServletRequest request, HttpSession session) {
+		String loggedState=(String)session.getAttribute("loggedstate");
+		if (loggedState == null || loggedState.isEmpty()) {
+			return "redirect:/";
+		}
+		
 		String itemName=request.getParameter("itemName");
 		String productType=request.getParameter("productType");
 		String shop=request.getParameter("shop");
@@ -74,128 +67,52 @@ public class AdminController {
 	
 	@RequestMapping(value="/readItemList", method=RequestMethod.GET)
 	public String readItemList(HttpServletRequest request, HttpSession session) {
-		String loggedState=(String)session.getAttribute("loggedstate");
-		if(loggedState!=null || !loggedState.isEmpty()) {
-			if(loggedState.contains("admin")) {
-				List<Item> itemList=itemRepository.findAll(Sort.by(Sort.Direction.DESC, "saleDate"));
-				
-				request.setAttribute("itemList", itemList);
-				
-				return "readItem";	
-			}
-			else {
-				Member loggedMember=memberRepository.findByUserId(loggedState);
-				request.setAttribute("currentUserId", loggedMember.getUserId());
-				request.setAttribute("currentName", loggedMember.getName());
-				request.setAttribute("currentAge", loggedMember.getAge());
-				request.setAttribute("currentAddress", loggedMember.getAddress());
-				request.setAttribute("currenPhone", loggedMember.getPhone());
-				return "loginSuccess";
-			}
+		String loggedState=(String)session.getAttribute("loggedstate");	
+		if(loggedState==null || loggedState.isEmpty()) {
+			return "redirect:/";
 		}
 		
-		return "redirect:/";
+		List<Item> itemList=itemRepository.findAll(Sort.by(Sort.Direction.DESC, "saleDate"));
 		
-//		String loggedState=(String)session.getAttribute("loggedstate");
-//		if(loggedState==null || loggedState.isEmpty()) {
-//			return "redirect:/";
-//		}
-//		
-//		List<Item> itemList=itemRepository.findAll(Sort.by(Sort.Direction.DESC, "saleDate"));
-//		
-//		request.setAttribute("itemList", itemList);
-//		
-//		return "readItem";
+		request.setAttribute("itemList", itemList);
 		
+		return "readItem";
 	}
 	
 	@RequestMapping(value="/deleteItem", method=RequestMethod.GET)
-	public String deleteItem(HttpServletRequest request, HttpSession session) {
+	public String deleteItem(HttpServletRequest request, HttpSession session) {		
 		String loggedState=(String)session.getAttribute("loggedstate");
-		if(loggedState!=null || !loggedState.isEmpty()) {
-			if(loggedState.contains("admin")) {
-				String strId=request.getParameter("id");
-				Long id=Long.parseLong(strId);
-				itemRepository.deleteById(id);
-				
-				List<Item> itemList=itemRepository.findAll(Sort.by(Sort.Direction.DESC, "saleDate"));
-				
-				request.setAttribute("itemList", itemList);
-				
-				return "readItem";	
-			}
-			else {
-				Member loggedMember=memberRepository.findByUserId(loggedState);
-				request.setAttribute("currentUserId", loggedMember.getUserId());
-				request.setAttribute("currentName", loggedMember.getName());
-				request.setAttribute("currentAge", loggedMember.getAge());
-				request.setAttribute("currentAddress", loggedMember.getAddress());
-				request.setAttribute("currenPhone", loggedMember.getPhone());
-				return "loginSuccess";
-			}
+		if(loggedState==null || loggedState.isEmpty()) {
+			return "redirect:/";
 		}
 		
-		return "redirect:/";
+		String strId=request.getParameter("id");
+		Long id=Long.parseLong(strId);
+		itemRepository.deleteById(id);
 		
-//		String loggedState=(String)session.getAttribute("loggedstate");
-//		if(loggedState==null || loggedState.isEmpty()) {
-//			return "redirect:/";
-//		}
-//		
-//		String strId=request.getParameter("id");
-//		Long id=Long.parseLong(strId);
-//		itemRepository.deleteById(id);
-//		
-//		List<Item> itemList=itemRepository.findAll(Sort.by(Sort.Direction.DESC, "saleDate"));
-//		
-//		request.setAttribute("itemList", itemList);
-//		
-//		return "readItem";
+		List<Item> itemList=itemRepository.findAll(Sort.by(Sort.Direction.DESC, "saleDate"));
+		
+		request.setAttribute("itemList", itemList);
+		
+		return "readItem";
 
 	}
 	
 	@RequestMapping(value = "/adminPage", method = RequestMethod.GET)
-	public String adminPage(HttpServletRequest request, HttpSession session) {
-		String loggedState=(String)session.getAttribute("loggedstate");
-		if(loggedState!=null || !loggedState.isEmpty()) {
-			if(loggedState.contains("admin")) {
-				Member loggedMember = memberRepository.findByUserId(loggedState);
-
-				request.setAttribute("currentUserId", loggedMember.getUserId());
-				request.setAttribute("currentName", loggedMember.getName());
-				request.setAttribute("currentAge", loggedMember.getAge());
-				request.setAttribute("currentAddress", loggedMember.getAddress());
-				request.setAttribute("currenPhone", loggedMember.getPhone());
-
-				return "adminPage";
-			}
-			else {
-				Member loggedMember=memberRepository.findByUserId(loggedState);
-				request.setAttribute("currentUserId", loggedMember.getUserId());
-				request.setAttribute("currentName", loggedMember.getName());
-				request.setAttribute("currentAge", loggedMember.getAge());
-				request.setAttribute("currentAddress", loggedMember.getAddress());
-				request.setAttribute("currenPhone", loggedMember.getPhone());
-				return "loginSuccess";
-			}
+	public String adminPage(HttpServletRequest request, HttpSession session) {		
+		String loggedState = (String) session.getAttribute("loggedstate");
+		if (loggedState == null || loggedState.isEmpty()) {
+			return "redirect:/";
 		}
-		
-		return "redirect:/";
-		
-//		String loggedState = (String) session.getAttribute("loggedstate");
-//		if (loggedState == null || loggedState.isEmpty()) {
-//			return "redirect:/";
-//		}
-//
-//		Member loggedMember = memberRepository.findByUserId(loggedState);
-//
-//		request.setAttribute("currentUserId", loggedMember.getUserId());
-//		request.setAttribute("currentName", loggedMember.getName());
-//		request.setAttribute("currentAge", loggedMember.getAge());
-//		request.setAttribute("currentAddress", loggedMember.getAddress());
-//		request.setAttribute("currenPhone", loggedMember.getPhone());
-//
-//		return "adminPage";
 
+		Member loggedMember = memberRepository.findByUserId(loggedState);
+
+		request.setAttribute("currentUserId", loggedMember.getUserId());
+		request.setAttribute("currentName", loggedMember.getName());
+		request.setAttribute("currentAge", loggedMember.getAge());
+		request.setAttribute("currentAddress", loggedMember.getAddress());
+		request.setAttribute("currenPhone", loggedMember.getPhone());
+
+		return "adminPage";
 	}
 }

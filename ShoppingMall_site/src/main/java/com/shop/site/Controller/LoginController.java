@@ -62,7 +62,7 @@ public class LoginController {
 			//관리자 기능 추가-
 			if(loggedMember.getUserId().contains("admin")) {
 				session.setAttribute("loggedstate", loggedMember.getUserId());
-				
+				System.out.println((String)session.getAttribute("loggedstate"));
 				request.setAttribute("currentUserId", loggedMember.getUserId());
 				request.setAttribute("currentName", loggedMember.getName());
 				request.setAttribute("currentAge", loggedMember.getAge());
@@ -73,7 +73,7 @@ public class LoginController {
 			}
 			
 			session.setAttribute("loggedstate", loggedMember.getUserId());
-			
+			System.out.println((String)session.getAttribute("loggedstate"));
 			request.setAttribute("currentUserId", loggedMember.getUserId());
 			request.setAttribute("currentName", loggedMember.getName());
 			request.setAttribute("currentAge", loggedMember.getAge());
@@ -87,13 +87,27 @@ public class LoginController {
 		}
 	}
 	
-	@RequestMapping(value="/loginState", method=RequestMethod.GET)
+	@RequestMapping(value = "/loginState", method = RequestMethod.GET)
 	public String logInState(HttpServletRequest request, HttpSession session) {
 		String loggedState=(String)session.getAttribute("loggedstate");
-		if(loggedState!=null) {
+		if(loggedState!=null && !loggedState.isEmpty()) {
 			Member loggedResult=memberRepository.findByUserId(loggedState);
 			
-			request.setAttribute("currentUserId", loggedState);
+			if(loggedResult.getUserId().contains("admin")) {
+				session.setAttribute("loggedstate", loggedResult.getUserId());
+				System.out.println((String)session.getAttribute("loggedstate"));
+				request.setAttribute("currentUserId", loggedResult.getUserId());
+				request.setAttribute("currentName", loggedResult.getName());
+				request.setAttribute("currentAge", loggedResult.getAge());
+				request.setAttribute("currentAddress", loggedResult.getAddress());
+				request.setAttribute("currentPhone", loggedResult.getPhone());
+				
+				return "adminPage";
+			}
+			
+			session.setAttribute("loggedstate", loggedResult.getUserId());
+			System.out.println((String)session.getAttribute("loggedstate"));
+			request.setAttribute("currentUserId", loggedResult.getUserId());
 			request.setAttribute("currentName", loggedResult.getName());
 			request.setAttribute("currentAge", loggedResult.getAge());
 			request.setAttribute("currentAddress", loggedResult.getAddress());
@@ -102,7 +116,7 @@ public class LoginController {
 			return "loginSuccess";
 		}
 		else {
-			return "redirect:/";
+			return "indexJsp";
 		}	
 	}
 	

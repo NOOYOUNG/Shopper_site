@@ -13,7 +13,7 @@
 		<thead>
 			<tr>
 				<td>게시글번호</td>
-				<td>사용자 아이디</td>
+				<td>작성자</td>
 				<td>내용</td>
 			</tr>
 		</thead>
@@ -27,11 +27,7 @@
 			</c:forEach>
 		</tbody>
 	</table>
-	<table>
-		<tr>
-			<td bgcolor="black" height="2px" colspan=10></td>
-		</tr>
-	</table>
+	
 	<h3>1:1 문의 작성하기</h3>
 	<form name="personalqna" action="/writeqna" method="post">
 		<table>

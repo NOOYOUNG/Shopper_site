@@ -45,22 +45,21 @@ public class UserController {
 		String loggedState = (String) session.getAttribute("loggedstate");
 		System.out.println(loggedState);
 
-//		Member loggedmember=memberRepository.findByUserId(loggedState);
-//		request.setAttribute("loggedmember", loggedmember);
-//		
-		//		if (loggedState != null || !loggedState.isEmpty()) {
-//			return "askQnA";
-//		} else {
-//			Member loggedMember = memberRepository.findByUserId(loggedState);
-//			request.setAttribute("currentUserId", loggedMember.getUserId());
-//			request.setAttribute("currentName", loggedMember.getName());
-//			request.setAttribute("currentAge", loggedMember.getAge());
-//			request.setAttribute("currentAddress", loggedMember.getAddress());
-//			request.setAttribute("currenPhone", loggedMember.getPhone());
-//			return "loginSuccess";
-//		}
+		Member loggedmember=memberRepository.findByUserId(loggedState);
+		request.setAttribute("loggedmember", loggedmember);
 		
-		return "askQnA";
+		if (loggedState != null || !loggedState.isEmpty()) {
+			return "askQnA";
+		} 
+		else {
+			Member loggedMember = memberRepository.findByUserId(loggedState);
+			request.setAttribute("currentUserId", loggedMember.getUserId());
+			request.setAttribute("currentName", loggedMember.getName());
+			request.setAttribute("currentAge", loggedMember.getAge());
+			request.setAttribute("currentAddress", loggedMember.getAddress());
+			request.setAttribute("currenPhone", loggedMember.getPhone());
+			return "loginSuccess";
+		}
 	}
 	
 	@RequestMapping(value="/writeqna", method=RequestMethod.POST)
